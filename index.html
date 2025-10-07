@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinoy Love Jokes & Relapse Moments</title>
+    <title>Pinoy Love Predictor: Future ng Pag-ibig Mo!</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -61,8 +61,38 @@
             animation: fadeInUp 1s ease-out 0.5s both;
         }
 
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #d63384;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #d63384;
+            box-shadow: 0 0 10px rgba(214, 51, 132, 0.2);
+        }
+
         /* Button */
-        .joke-btn {
+        .predict-btn {
             background: linear-gradient(135deg, #d63384 0%, #e91e63 100%);
             color: white;
             border: none;
@@ -73,47 +103,64 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(214, 51, 132, 0.3);
-            margin-bottom: 2rem;
+            margin: 1rem 0;
+            width: 100%;
         }
 
-        .joke-btn:hover {
+        .predict-btn:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(214, 51, 132, 0.4);
         }
 
-        .joke-btn:active {
+        .predict-btn:active {
             transform: translateY(-2px);
         }
 
-        /* Joke Display */
-        .joke-display {
-            min-height: 100px;
+        .predict-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Prediction Display */
+        .prediction-display {
+            min-height: 150px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 400;
             color: #d63384;
             line-height: 1.5;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.7);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 255, 255, 0.8) 100%);
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 1rem;
+            border: 2px dashed #ff6b9d;
         }
 
-        .joke-display.show {
+        .prediction-display.show {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .joke-icon {
-            font-size: 2rem;
-            margin-right: 1rem;
+        .prediction-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             color: #ff6b9d;
             animation: heartBeat 0.6s ease-in-out;
+        }
+
+        .compatibility-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e91e63;
+            margin: 0.5rem 0;
         }
 
         /* Animations */
@@ -158,8 +205,9 @@
                 margin: 1rem;
             }
 
-            .joke-display {
-                font-size: 1.1rem;
+            .prediction-display {
+                font-size: 1rem;
+                padding: 1rem;
             }
         }
 
@@ -190,6 +238,14 @@
                 opacity: 0.5;
             }
         }
+
+        /* Error Message */
+        .error-msg {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -197,50 +253,125 @@
     <div class="hearts" id="hearts"></div>
 
     <header>
-        <h1><i class="fas fa-heart"></i> Pinoy Love Jokes</h1>
-        <p class="subtitle">Heartbreak, Relapse, at mga "What If" Moments sa Pag-ibig</p>
+        <h1><i class="fas fa-crystal-ball"></i> Pinoy Love Predictor</h1>
+        <p class="subtitle">Sabihin mo ang names niyo, at i-predict ko ang future ng love life – with jokes at heartbreak percentages! 😂💔</p>
     </header>
 
     <div class="container">
-        <button class="joke-btn" onclick="generateJoke()">
-            <i class="fas fa-laugh"></i> I-Generate Joke!
-        </button>
-        <div class="joke-display" id="jokeDisplay">
-            <i class="fas fa-heart-broken joke-icon"></i>
-            <span>Click the button to get a Pinoy love joke!</span>
+        <form id="loveForm">
+            <div class="form-group">
+                <label for="userName">Your Name (Ikaw, pre!):</label>
+                <input type="text" id="userName" placeholder="e.g., Juan" required>
+                <div class="error-msg" id="userError">Please enter your name!</div>
+            </div>
+            <div class="form-group">
+                <label for="partnerName">Crush/Partner/Soulmate Name:</label>
+                <input type="text" id="partnerName" placeholder="e.g., Maria" required>
+                <div class="error-msg" id="partnerError">Please enter their name!</div>
+            </div>
+            <button type="submit" class="predict-btn">
+                <i class="fas fa-magic"></i> Predict Our Love Future!
+            </button>
+        </form>
+        <div class="prediction-display" id="predictionDisplay">
+            <i class="fas fa-heart-broken prediction-icon"></i>
+            <span>Enter names above and click predict for your hilarious love forecast!</span>
         </div>
     </div>
 
     <script>
-        // Array of Pinoy Love Jokes (Taglish style, focused on love and relapse moments)
-        const jokes = [
-            "WHAT IF PINA ASA KALANG NYA? 😔 Parang waiting shed sa ulan – basa ka pa rin sa pag-asa!",
-            "WHAT IF HINDI KA TALAGA MINAHAL? 💔 Kasi, love is blind... pero ikaw, sobrang bulag-bulagan!",
-            "Bakit ka pa babalik sa ex? Kasi, relapse sa love – parang adiks sa chicharon, alam mong masama pero sarap!",
-            "Love is like sisig: mainit, masarap, pero pag natuyo, nasunog na feelings mo! 🔥❤️",
-            "Ano ang heartbreak? Parang traffic sa EDSA – stuck ka, walang galaw, at sobrang init ng drama!",
-            "What if 'di ka niya talaga deserve? 😢 Kasi, ikaw gold, siya plastic – upgrade na, pre!",
-            "Relapse moment: Text mo ex, 'Miss kita.' Reply: 'Sino to?' Ouch, blocked na heart! 📱💥",
-            "Pag-ibig parang kape: mainit sa simula, pero pag lumamig, di na masarap – add sugar na lang!",
-            "Bakit nahihirapan mag-move on? Kasi, love is a boomerang – bumabalik lagi ang sakit! 🪃😭",
-            "What if fake lang lahat? 🤔 Parang filter sa IG – maganda sa labas, pero reality check: solo ka pa rin!"
+        // Array of many Pinoy-style love predictions (joke-y, with percentages on heartbreak, jokes, relapse, etc.)
+        const predictions = [
+            "{user} at {partner}: 70% maghihiwalay sa chismis ng barkada, 30% magsasama sa karaoke hanggang umaga! 🎤💔",
+            "{user} at {partner}: 60% heartbreak sa 'di pag-reply ng text, 40% jokes sa pica-pica dates! 🍿😂",
+            "{user} at {partner}: 80% relapse sa ex-memories, 20% forever sa Jollibee dates! 🍔❤️",
+            "{user} at {partner}: 50% maghiwalay sa traffic fights, 50% magsasabay sa jeepney rides! 🚗😭",
+            "{user} at {partner}: 75% sakit ng ulo sa jealousy, 25% sweet sa 'I love you' sa Tagalog! 💕🤕",
+            "{user} at {partner}: 65% mag-end sa ghosting, 35% mag-start ulit sa 'Sorry' messages! 📱👻",
+            "{user} at {partner}: 90% heartbreak sa 'What if' questions, 10% happy sa 'Ano ba' replies! ❓😢",
+            "{user} at {partner}: 55% maghihiwalay sa budget dates, 45% mag-enjoy sa lugaw stalls! 🍲💸",
+            "{user} at {partner}: 85% relapse sa old love songs, 15% new playlist sa Spotify! 🎶🔄",
+            "{user} at {partner}: 40% forever love, 60% 'di mag-work sa family dramas! 👨‍👩‍👧‍👦😔",
+            "{user} at {partner}: 70% jokes sa corny lines, 30% serious sa 'Mahal kita' moments! 😘🤡",
+            "{user} at {partner}: 95% maghihiwalay sa long-distance, 5% mag-survive sa video calls! 📹🌍",
+            "{user} at {partner}: 50% heartbreak sa misunderstandings, 50% make-up sa ice cream dates! 🍦💔",
+            "{user} at {partner}: 80% sakit sa 'Di ka na cute' comments, 20% cute sa baby talks! 🍼😂",
+            "{user} at {partner}: 60% mag-end sa work stress, 40% mag-bond sa Netflix binges! 📺😩",
+            "{user} at {partner}: 75% relapse sa first date memories, 25% future sa beach trips! 🏖️📸",
+            "{user} at {partner}: 45% happy ending, 55% plot twist sa third party rumors! 😲🕵️",
+            "{user} at {partner}: 90% jokes sa puns, 10% tears sa goodbyes! 😆😢",
+            "{user} at {partner}: 65% maghihiwalay sa pride, 35% mag-reconcile sa apologies! 🙏💔",
+            "{user} at {partner}: 70% love sa summer, 30% cold sa rainy season fights! ☀️🌧️"
         ];
 
-        // Function to generate random joke
-        function generateJoke() {
-            const jokeDisplay = document.getElementById('jokeDisplay');
-            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+        // Simple "calculation" function for compatibility score (fun, not real math)
+        function calculateCompatibility(userName, partnerName) {
+            let score = 0;
+            for (let i = 0; i < Math.min(userName.length, partnerName.length); i++) {
+                score += (userName.charCodeAt(i) + partnerName.charCodeAt(i)) % 100;
+            }
+            return Math.abs(score % 100); // 0-99 for fun
+        }
+
+        // Function to generate prediction
+        function generatePrediction(userName, partnerName) {
+            const predictionDisplay = document.getElementById('predictionDisplay');
+            const compatibility = calculateCompatibility(userName, partnerName);
+            const randomIndex = Math.floor(Math.random() * predictions.length);
+            let prediction = predictions[randomIndex].replace('{user}', userName).replace('{partner}', partnerName);
             
-            // Update text and show with animation
-            jokeDisplay.innerHTML = `<i class="fas fa-heart-broken joke-icon"></i><span>${randomJoke}</span>`;
-            jokeDisplay.classList.remove('show');
+            // Add compatibility score
+            const scoreText = `Compatibility Score: ${compatibility}% (Based on Pinoy Magic! ✨)`;
+            
+            // Update display with animation
+            predictionDisplay.innerHTML = `
+                <i class="fas fa-crystal-ball prediction-icon"></i>
+                <div class="compatibility-score">${scoreText}</div>
+                <p>${prediction}</p>
+            `;
+            predictionDisplay.classList.remove('show');
             setTimeout(() => {
-                jokeDisplay.classList.add('show');
+                predictionDisplay.classList.add('show');
             }, 100);
 
-            // Add floating heart on click
-            createFloatingHeart();
+            // Add extra floating hearts for celebration
+            for (let i = 0; i < 3; i++) {
+                setTimeout(createFloatingHeart, i * 500);
+            }
         }
+
+        // Form submission handler
+        document.getElementById('loveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userName = document.getElementById('userName').value.trim();
+            const partnerName = document.getElementById('partnerName').value.trim();
+            const userError = document.getElementById('userError');
+            const partnerError = document.getElementById('partnerError');
+            const predictBtn = document.querySelector('.predict-btn');
+
+            // Validation
+            userError.style.display = 'none';
+            partnerError.style.display = 'none';
+            if (!userName) {
+                userError.style.display = 'block';
+                return;
+            }
+            if (!partnerName) {
+                partnerError.style.display = 'block';
+                return;
+            }
+
+            // Disable button during processing
+            predictBtn.disabled = true;
+            predictBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+
+            // Simulate a short delay for "calculation"
+            setTimeout(() => {
+                generatePrediction(userName, partnerName);
+                predictBtn.disabled = false;
+                predictBtn.innerHTML = '<i class="fas fa-magic"></i> Predict Our Love Future!';
+            }, 1500);
+        });
 
         // Create floating hearts for fun effect
         function createFloatingHeart() {
@@ -263,7 +394,7 @@
         }
 
         // Auto-generate hearts periodically
-        setInterval(createFloatingHeart, 3000);
+        setInterval(createFloatingHeart, 4000);
     </script>
 </body>
 </html>
