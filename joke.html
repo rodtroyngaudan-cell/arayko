@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinoy Love Jokes & Relapse Moments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d63384;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        /* Main Content */
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        /* Button */
+        .joke-btn {
+            background: linear-gradient(135deg, #d63384 0%, #e91e63 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(214, 51, 132, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .joke-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(214, 51, 132, 0.4);
+        }
+
+        .joke-btn:active {
+            transform: translateY(-2px);
+        }
+
+        /* Joke Display */
+        .joke-display {
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #d63384;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            padding: 1rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .joke-display.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .joke-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: #ff6b9d;
+            animation: heartBeat 0.6s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .joke-display {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Floating Hearts Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts" id="hearts"></div>
+
+    <header>
+        <h1><i class="fas fa-heart"></i> Pinoy Love Jokes</h1>
+        <p class="subtitle">Heartbreak, Relapse, at mga "What If" Moments sa Pag-ibig</p>
+    </header>
+
+    <div class="container">
+        <button class="joke-btn" onclick="generateJoke()">
+            <i class="fas fa-laugh"></i> I-Generate Joke!
+        </button>
+        <div class="joke-display" id="jokeDisplay">
+            <i class="fas fa-heart-broken joke-icon"></i>
+            <span>Click the button to get a Pinoy love joke!</span>
+        </div>
+    </div>
+
+    <script>
+        // Array of Pinoy Love Jokes (Taglish style, focused on love and relapse moments)
+        const jokes = [
+            "WHAT IF PINA ASA KALANG NYA? 😔 Parang waiting shed sa ulan – basa ka pa rin sa pag-asa!",
+            "WHAT IF HINDI KA TALAGA MINAHAL? 💔 Kasi, love is blind... pero ikaw, sobrang bulag-bulagan!",
+            "Bakit ka pa babalik sa ex? Kasi, relapse sa love – parang adiks sa chicharon, alam mong masama pero sarap!",
+            "Love is like sisig: mainit, masarap, pero pag natuyo, nasunog na feelings mo! 🔥❤️",
+            "Ano ang heartbreak? Parang traffic sa EDSA – stuck ka, walang galaw, at sobrang init ng drama!",
+            "What if 'di ka niya talaga deserve? 😢 Kasi, ikaw gold, siya plastic – upgrade na, pre!",
+            "Relapse moment: Text mo ex, 'Miss kita.' Reply: 'Sino to?' Ouch, blocked na heart! 📱💥",
+            "Pag-ibig parang kape: mainit sa simula, pero pag lumamig, di na masarap – add sugar na lang!",
+            "Bakit nahihirapan mag-move on? Kasi, love is a boomerang – bumabalik lagi ang sakit! 🪃😭",
+            "What if fake lang lahat? 🤔 Parang filter sa IG – maganda sa labas, pero reality check: solo ka pa rin!"
+        ];
+
+        // Function to generate random joke
+        function generateJoke() {
+            const jokeDisplay = document.getElementById('jokeDisplay');
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            
+            // Update text and show with animation
+            jokeDisplay.innerHTML = `<i class="fas fa-heart-broken joke-icon"></i><span>${randomJoke}</span>`;
+            jokeDisplay.classList.remove('show');
+            setTimeout(() => {
+                jokeDisplay.classList.add('show');
+            }, 100);
+
+            // Add floating heart on click
+            createFloatingHeart();
+        }
+
+        // Create floating hearts for fun effect
+        function createFloatingHeart() {
+            const hearts = document.getElementById('hearts');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            hearts.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        // Generate initial floating hearts
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingHeart, i * 1000);
+        }
+
+        // Auto-generate hearts periodically
+        setInterval(createFloatingHeart, 3000);
+    </script>
+</body>
+</html>
